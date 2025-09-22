@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>All Reservations</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Reservation ID</th>
+            <th>User</th>
+            <th>Lot</th>
+            <th>spot ID</th>
+            <th>Car</th>
+            <th>Registration No.</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Time Reserved(hours)</th>
+            <th>Price(per hour)</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for res in reservations %}
+        <tr>
+            <td>{{ res.id }}</td>
+            <td>{{ res.user.username }}</td>
+            <td>{{ res.spot.lot.name }}</td>
+            <td>{{ res.spot_id }}</td>
+            <td>{{ res.car_name }}</td>
+            <td>{{ res.car_number }}</td>
+            <td>{{ res.start_time.strftime('%d-%b-%Y %H:%M') }}</td>
+            <td>
+                {% if res.end_time %}
+                    {{ res.end_time.strftime('%d-%b-%Y %H:%M') }}
+                {% else %}
+                    <span class="badge bg-success">Occupied</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if res.end_time %}
+                    {{ ((res.end_time - res.start_time).total_seconds() / 3600) | round(2) }}
+                {% else %}
+                    <!-- <span class="badge bg-success">Occupied</span> -->
+                    {{ ((now - res.start_time).total_seconds() / 3600) | round(2) }}*
+                {% endif %}
+            </td>
+            <td>₹{{ res.spot.lot.price }}</td>
+            <td>
+                {% if res.end_time %}
+                    ₹{{ ((res.end_time - res.start_time).total_seconds() / 3600 * res.spot.lot.price) | round(2) }}
+                {% else %}
+                    <!-- <span class="badge bg-success">Occupied</span> -->
+                    ₹{{ ((now - res.start_time).total_seconds() / 3600 * res.spot.lot.price) | round(2) }}*
+                {% endif %}  
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

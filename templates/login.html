@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;">
+<div style="padding: 2rem; background-color: rgb(161, 210, 251); box-shadow: 0 0 10px rgba(29, 29, 134, 0.1); border-radius: 8px;height: 50%;width: 40%;">
+<h2>Login</h2>
+<style>
+  body {
+    background-color: rgb(80, 222, 187);
+  }
+</style>
+<form method="POST">
+    <div class="mb-3">
+        <label>Username</label>
+        <input name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <input name="password" type="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a href="/register" class="btn btn-link">Register</a>
+</form>
+</div>
+</div>
+{% endblock %}

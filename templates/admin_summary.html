@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Admin Summary Charts</h3>
+
+  <div class="my-4">
+    <h5>Reservations per Lot</h5>
+    <img src="{{ url_for('static', filename=res_chart) }}" class="img-fluid border rounded shadow-sm">
+  </div>
+
+  <div class="my-4">
+    <h5>Revenue per Lot (₹)</h5>
+    <img src="{{ url_for('static', filename=rev_chart) }}" class="img-fluid border rounded shadow-sm">
+  </div>
+</div>
+{% endblock %}

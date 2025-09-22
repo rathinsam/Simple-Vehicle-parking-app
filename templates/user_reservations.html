@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Reservations</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Lot</th>
+            <th>Spot ID</th>
+            <th>Car</th>
+            <th>Registration No.</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Time Reserved(hours)</th>
+            <th>Price(per hour)</th>
+            <th>Total Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for res in reservations %}
+        <tr>
+            <td>{{ res.spot.lot.name }}</td>
+            <td>{{ res.spot_id }}</td>
+            <td>{{ res.car_name }}</td>
+            <td>{{ res.car_number }}</td>
+            <td>{{ res.start_time.strftime('%d-%b-%Y %H:%M') }}</td>
+            <td> {% if res.end_time %}
+                    {{ res.end_time.strftime('%d-%b-%Y %H:%M') }}
+                {% else %}
+                    <span class="badge bg-success">Occupied</span>
+                {% endif %}
+            </td>
+            <td>{% if res.end_time %}
+                    {{ ((res.end_time - res.start_time).total_seconds() / 3600) | round(2) }}
+                {% else %}
+                    <!-- <span class="badge bg-success">Occupied</span> -->
+                    {{ ((now - res.start_time).total_seconds() / 3600) | round(2) }}*
+                {% endif %}
+            </td>
+            <td>₹{{ res.spot.lot.price }}</td>
+            <td>
+                {% if res.end_time %}
+                    ₹{{ ((res.end_time - res.start_time).total_seconds() / 3600 * res.spot.lot.price) | round(2) }}
+                {% else %}
+                    <!-- <span class="badge bg-success">Occupied</span> -->
+                    ₹{{ ((now - res.start_time).total_seconds() / 3600 * res.spot.lot.price) | round(2) }}*
+                {% endif %}  
+            </td>
+            <td>
+                {% if not res.end_time %}
+                <!-- <button class="btn btn-secondary btn-sm" disabled>Released</button> -->
+                 <a href="/release_payment/{{ res.id }}" class="btn btn-danger btn-sm">Release</a>
+                {% else %}
+                <!-- <a href="/vacate/{{ res.spot_id }}" class="btn btn-danger btn-sm">Release</a> -->
+                <button class="btn btn-secondary btn-sm" disabled>Released</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
